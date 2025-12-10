@@ -1,8 +1,42 @@
-// ============================================
-// ASSETGUARD - CONNECTED TO BACKEND VERSION
-// ============================================
+// ========================
+// AssetGuard Backend Server
+// ========================
 
-// API URL - Change this when you deploy online
+console.log('🚀 Starting AssetGuard Server...');
+
+const express = require('express');
+const cors = require('cors');
+const path = require('path');
+
+const app = express();
+
+// Middleware
+app.use(cors());
+app.use(express.json());
+app.use(express.static(path.join(__dirname)));
+
+// Basic route to test server
+app.get('/api/health', (req, res) => {
+    console.log('✅ Health check requested');
+    res.json({ status: 'OK', message: 'AssetGuard Server is running' });
+});
+
+// Serve frontend for any other route
+app.get('*', (req, res) => {
+    console.log(`📁 Serving frontend for: ${req.path}`);
+    res.sendFile(path.join(__dirname, 'index.html'));
+});
+
+// Start server
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`✅ Server running on port ${PORT}`);
+    console.log(`🌐 Local: http://localhost:${PORT}`);
+    console.log(`🔗 API: http://localhost:${PORT}/api/health`);
+});
+
+
+// API URL - Change this when you deploy online for anyone doing code changes please
 const API_URL = 'http://localhost:3000/api';
 
 // Global variables
